@@ -49,7 +49,7 @@ module.exports = function(grunt) {
     version: {
       src: ['package.json', 'index.html'],
       options: {
-        prefix: '[\?]?version[\'"]?[=:]\s*[\'"]?'
+        prefix: '[\?]?version[\'\"]?[=:]\\s*[\'\"]?'
       }
     },
     exec: {
@@ -96,34 +96,3 @@ module.exports = function(grunt) {
   });
 };
 
-
-/*
-
-grunt.initConfig({
-  version: {
-    src: ['package.json', 'index.html'],
-    options: {
-      prefix: '[\?]?version[\\'"]?[=:]\s*[\\'"]?'
-  },
-  exec: {
-    add: 'git add .',
-    commit: {
-        cmd: function () {
-          var oldPkg = this.config('pkg'),
-              pkg = grunt.file.readJSON('package.json'),
-              msg = "Updating from ' + oldPkg.version + ' to ' + pkg.version + '",
-              cmd = 'git commit -am ' + msg;
-          return cmd;
-        }
-    },
-    push: 'git push'
-  }
-});
-
-grunt.registerTask('deploy', function (type) {
-  type = type || 'patch';
-  grunt.task.run(['version::' + type, 'exec:add', 'exec:commit', 'exec:push']);
-});
-
-
-*/
