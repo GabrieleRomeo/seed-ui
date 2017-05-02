@@ -52,14 +52,16 @@ module.exports = function(grunt) {
         prefix: '[\?]?version[\'\"]?[=:]\\s*[\'\"]?'
       }
     },
+    pkg: grunt.file.readJSON('package.json'),
     exec: {
       add: 'git add .',
       commit: {
           cmd: function () {
             var oldPkg = this.config('pkg'),
                 pkg = grunt.file.readJSON('package.json'),
-                msg = "Updating from ' + oldPkg.version + ' to ' + pkg.version + '",
-                cmd = 'git commit -m ' + msg;
+                msg = 'Updating from ' + oldPkg.version + ' to ' + pkg.version,
+                cmd = 'git commit -m "' + msg + '"';
+
             return cmd;
           }
       },

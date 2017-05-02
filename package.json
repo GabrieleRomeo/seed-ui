@@ -1,6 +1,6 @@
 {
   "name": "seed-ui",
-  "version": "1.0.0",
+  "version": "2.0.3",
   "description": "The UI Framework for beautiful websites and applications.",
   "main": "dist/main.js",
   "scripts": {
