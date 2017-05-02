@@ -59,7 +59,7 @@ module.exports = function(grunt) {
             var oldPkg = this.config('pkg'),
                 pkg = grunt.file.readJSON('package.json'),
                 msg = "Updating from ' + oldPkg.version + ' to ' + pkg.version + '",
-                cmd = 'git commit -am ' + msg;
+                cmd = 'git commit -m ' + msg;
             return cmd;
           }
       },
