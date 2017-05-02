@@ -2,6 +2,9 @@ module.exports = function(grunt) {
 
   // Configuration
   grunt.initConfig({
+    htmllint: {
+      all: ['html-temp/*.html', 'index.html']
+    },
     concat: {
       js: {
         src: ['components/*/*.js'],
@@ -42,21 +45,35 @@ module.exports = function(grunt) {
           livereload: true
         }
       }
-    }//, // copy task is not needed anymore, at least for css and js
-    // copy: {
-    //   css: {
-    //     files: [{
-    //       src: 'dist/main.css',
-    //       dest: 'prod/main.css'
-    //     }]
-    //   },
-    //   js: {
-    //     files: [{
-    //       src: 'dist/main.js',
-    //       dest: 'prod/main.js',
-    //     }]
-    //   }
-    // }
+    },
+    version: {
+      src: ['package.json', 'index.html'],
+      options: {
+        prefix: '[\?]?version[\'"]?[=:]\s*[\'"]?'
+      }
+    },
+    exec: {
+      add: 'git add .',
+      commit: {
+          cmd: function () {
+            var oldPkg = this.config('pkg'),
+                pkg = grunt.file.readJSON('package.json'),
+                msg = "Updating from ' + oldPkg.version + ' to ' + pkg.version + '",
+                cmd = 'git commit -am ' + msg;
+            return cmd;
+          }
+      },
+      push: 'git push'
+    },
+    imagemin: {
+        dynamic: {
+          files: [{
+            expand: true,
+            src: ['img/*.{png,jpg,jpeg,gif}'],  // Glob patterns to match
+            dest: ''                  // Destination directory
+          }]
+        }
+      }
   });
 
   // Load plugins
@@ -65,9 +82,47 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-html');
+  grunt.loadNpmTasks('grunt-version');
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
 
   // Register tasks
-  grunt.registerTask('build', ['uglify', 'sass']); // 'grunt build' to run this
+  grunt.registerTask('build', ['uglify', 'sass', 'imagemin']); // 'grunt build' to run this
   grunt.registerTask('default', ['concat', 'sass', 'watch']); // 'grunt' to run this
+  grunt.registerTask('deploy', function (type) {
+    type = type || 'patch';
+    grunt.task.run(['version::' + type, 'exec:add', 'exec:commit', 'exec:push']);
+  });
+};
 
-}
+
+/*
+
+grunt.initConfig({
+  version: {
+    src: ['package.json', 'index.html'],
+    options: {
+      prefix: '[\?]?version[\\'"]?[=:]\s*[\\'"]?'
+  },
+  exec: {
+    add: 'git add .',
+    commit: {
+        cmd: function () {
+          var oldPkg = this.config('pkg'),
+              pkg = grunt.file.readJSON('package.json'),
+              msg = "Updating from ' + oldPkg.version + ' to ' + pkg.version + '",
+              cmd = 'git commit -am ' + msg;
+          return cmd;
+        }
+    },
+    push: 'git push'
+  }
+});
+
+grunt.registerTask('deploy', function (type) {
+  type = type || 'patch';
+  grunt.task.run(['version::' + type, 'exec:add', 'exec:commit', 'exec:push']);
+});
+
+
+*/
