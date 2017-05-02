@@ -25,6 +25,7 @@
     "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-uglify": "^2.1.0",
     "grunt-contrib-watch": "^1.0.0",
+    "grunt-exec": "^2.0.0",
     "grunt-html": "^8.4.0",
     "grunt-version": "^1.1.1"
   }
